@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_init.h>
+#include <font.h>
 
 struct app_context
 {
@@ -25,6 +26,8 @@ void render();
 
 int main(int argc, char *argv[])
 {
+    font::load("asset/font.json");
+
     const SDL_InitFlags init_flags = SDL_INIT_EVENTS | SDL_INIT_VIDEO;
     const SDL_WindowFlags window_flags = 0;
     SDL_Init(init_flags);
