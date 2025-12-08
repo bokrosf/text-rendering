@@ -14,7 +14,6 @@ namespace font
         json data;
         input >> data;
         std::vector<character> mapping = data.get<std::vector<character>>();
-        std::cout << "loaded json: " << data << std::endl;
 
         for (auto &c : mapping)
         {
