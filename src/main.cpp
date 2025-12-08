@@ -2,6 +2,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_init.h>
 #include <font.h>
+#include <label.h>
 
 struct app_context
 {
@@ -10,6 +11,7 @@ struct app_context
     int height;
     SDL_Window *window;
     SDL_Renderer *renderer;
+    label main_label;
 };
 
 app_context app = app_context
@@ -19,10 +21,17 @@ app_context app = app_context
     .height = 600,
     .window = nullptr,
     .renderer = nullptr,
+    .main_label = label
+    {
+        .text = "a",
+        .font_size = 12,
+        .color = SDL_Color{255, 0, 0, 0},
+    },
 };
 
 void handle_events();
 void render();
+void render_label();
 
 int main(int argc, char *argv[])
 {
@@ -78,5 +87,29 @@ void render()
 {
     SDL_SetRenderDrawColor(app.renderer, 0, 0, 0, 0);
     SDL_RenderClear(app.renderer);
+    render_label();
     SDL_RenderPresent(app.renderer);
+}
+
+void render_label()
+{
+    SDL_SetRenderDrawColor(
+        app.renderer,
+        app.main_label.color.r,
+        app.main_label.color.g,
+        app.main_label.color.b,
+        app.main_label.color.a
+    );
+
+    for (char c : app.main_label.text)
+    {
+        for (const auto &sequence : font::character_table[c])
+        {
+            SDL_RenderLines(
+                app.renderer,
+                reinterpret_cast<const SDL_FPoint *>(sequence.data()),
+                sequence.size()
+            );
+        }
+    }
 }
