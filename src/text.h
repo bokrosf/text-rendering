@@ -1,12 +1,12 @@
-#ifndef FONT_H
-#define FONT_H
+#ifndef TEXT_H
+#define TEXT_H
 
 #include <string>
 #include <unordered_map>
 #include <vector>
 #include <nlohmann/json.hpp>
 
-namespace font
+namespace text
 {
     struct position
     {

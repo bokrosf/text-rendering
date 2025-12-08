@@ -1,10 +1,10 @@
 #include <fstream>
 #include <iostream>
-#include <font.h>
+#include <text.h>
 
 using json = nlohmann::json;
 
-namespace font
+namespace text
 {
     std::unordered_map<char, std::vector<polyline>> character_table;
 

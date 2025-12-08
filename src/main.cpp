@@ -1,7 +1,7 @@
 #include <iostream>
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_init.h>
-#include <font.h>
+#include <text.h>
 #include <label.h>
 
 struct app_context
@@ -35,7 +35,7 @@ void render_label();
 
 int main(int argc, char *argv[])
 {
-    font::load("asset/font.json");
+    text::load("asset/font.json");
 
     const SDL_InitFlags init_flags = SDL_INIT_EVENTS | SDL_INIT_VIDEO;
     const SDL_WindowFlags window_flags = 0;
@@ -103,7 +103,7 @@ void render_label()
 
     for (char c : app.main_label.text)
     {
-        for (const auto &sequence : font::character_table[c])
+        for (const auto &sequence : text::character_table[c])
         {
             SDL_RenderLines(
                 app.renderer,

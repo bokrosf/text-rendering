@@ -1,4 +1,4 @@
 target_sources("${PROJECT_NAME}" PRIVATE
-  font.cpp
+  text.cpp
   main.cpp
 )
