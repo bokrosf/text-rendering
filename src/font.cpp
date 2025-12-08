@@ -6,7 +6,7 @@ using json = nlohmann::json;
 
 namespace font
 {
-    std::vector<polyline> character_mapping[];
+    std::unordered_map<char, std::vector<polyline>> character_table;
 
     void load(const std::string &path)
     {
@@ -17,7 +17,7 @@ namespace font
 
         for (auto &c : mapping)
         {
-            character_mapping[c.code] = c.sections;
+            character_table[c.code] = c.sections;
         }
     }
 }

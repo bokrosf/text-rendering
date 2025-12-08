@@ -2,6 +2,7 @@
 #define FONT_H
 
 #include <string>
+#include <unordered_map>
 #include <vector>
 #include <nlohmann/json.hpp>
 
@@ -21,7 +22,7 @@ namespace font
         std::vector<polyline> sections;
     };
 
-    extern std::vector<polyline> character_mapping[127];
+    extern std::unordered_map<char, std::vector<polyline>> character_table;
 
     void load(const std::string &path);
 
