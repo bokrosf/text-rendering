@@ -19,6 +19,7 @@ namespace text
     struct font
     {
         int width;
+        int height;
         std::unordered_map<char, std::vector<polyline>> table;
     };
 
@@ -28,7 +29,7 @@ namespace text
 
     // Defines serialization/deserialization functions.
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(position, x, y)
-    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(font, width, table)
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(font, width, height, table)
 }
 
 #endif
