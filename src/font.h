@@ -1,12 +1,12 @@
 #ifndef FONT_H
 #define FONT_H
 
-#include <string_view>
+#include <string>
 #include <vector>
+#include <nlohmann/json.hpp>
 
-struct font
+namespace font
 {
-public:
     struct position
     {
         float x;
@@ -14,13 +14,20 @@ public:
     };
 
     using polyline = std::vector<position>;
-public:
-    char character;
-    std::vector<polyline> sections;
-};
 
-extern font::polyline character_mapping[127];
+    struct character
+    {
+        char code;
+        std::vector<polyline> sections;
+    };
 
-void load_font(std::string_view name);
+    extern std::vector<polyline> character_mapping[127];
+
+    void load(const std::string &path);
+
+    // Defines serialization/deserialization functions.
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(position, x, y)
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(character, code, sections)
+}
 
 #endif

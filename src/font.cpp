@@ -1,8 +1,24 @@
+#include <fstream>
+#include <iostream>
 #include <font.h>
 
-font::polyline character_mapping[];
+using json = nlohmann::json;
 
-void load_font(std::string_view name)
+namespace font
 {
-    // TODO implement by loading the JSON font data.
+    std::vector<polyline> character_mapping[];
+
+    void load(const std::string &path)
+    {
+        std::ifstream input(path);
+        json data;
+        input >> data;
+        std::vector<character> mapping = data.get<std::vector<character>>();
+        std::cout << "loaded json: " << data << std::endl;
+
+        for (auto &c : mapping)
+        {
+            character_mapping[c.code] = c.sections;
+        }
+    }
 }
