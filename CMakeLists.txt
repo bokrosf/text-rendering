@@ -36,3 +36,5 @@ target_include_directories("${PROJECT_NAME}"
   PRIVATE "${SDL3_BINARY_DIR}/include"
   PRIVATE "${json_BINARY_DIR}/include"
 )
+
+file(CREATE_LINK "${PROJECT_SOURCE_DIR}/asset" asset SYMBOLIC)
