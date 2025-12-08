@@ -16,19 +16,19 @@ namespace text
 
     using polyline = std::vector<position>;
 
-    struct character
+    struct font
     {
-        char code;
-        std::vector<polyline> sections;
+        int width;
+        std::unordered_map<char, std::vector<polyline>> table;
     };
 
-    extern std::unordered_map<char, std::vector<polyline>> character_table;
+    extern font loaded_font;
 
-    void load(const std::string &path);
+    void load_font(const std::string &path);
 
     // Defines serialization/deserialization functions.
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(position, x, y)
-    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(character, code, sections)
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(font, width, table)
 }
 
 #endif

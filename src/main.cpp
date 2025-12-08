@@ -35,7 +35,7 @@ void render_label();
 
 int main(int argc, char *argv[])
 {
-    text::load("asset/font.json");
+    text::load_font("asset/font.json");
 
     const SDL_InitFlags init_flags = SDL_INIT_EVENTS | SDL_INIT_VIDEO;
     const SDL_WindowFlags window_flags = 0;
@@ -103,7 +103,7 @@ void render_label()
 
     for (char c : app.main_label.text)
     {
-        for (const auto &sequence : text::character_table[c])
+        for (const auto &sequence : text::loaded_font.table[c])
         {
             SDL_RenderLines(
                 app.renderer,
