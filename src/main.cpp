@@ -23,7 +23,7 @@ app_context app = app_context
     .renderer = nullptr,
     .main_label = label
     {
-        .text = "a",
+        .text = "ababbba",
         .font_size = 12,
         .color = SDL_Color{255, 0, 0, 0},
     },
@@ -93,6 +93,9 @@ void render()
 
 void render_label()
 {
+    SDL_Rect original_viewport;
+    SDL_GetRenderViewport(app.renderer, &original_viewport);
+
     SDL_SetRenderDrawColor(
         app.renderer,
         app.main_label.color.r,
@@ -101,8 +104,18 @@ void render_label()
         app.main_label.color.a
     );
 
+    SDL_Rect font_area
+    {
+        .x = 0,
+        .y = 0,
+        .w = text::loaded_font.width,
+        .h = text::loaded_font.height,
+    };
+
     for (char c : app.main_label.text)
     {
+        SDL_SetRenderViewport(app.renderer, &font_area);
+
         for (const auto &sequence : text::loaded_font.table[c])
         {
             SDL_RenderLines(
@@ -111,5 +124,9 @@ void render_label()
                 sequence.size()
             );
         }
+
+        font_area.x += text::loaded_font.width;
     }
+
+    SDL_SetRenderViewport(app.renderer, &original_viewport);
 }
