@@ -13,7 +13,9 @@ namespace text
         std::ifstream input(path);
         json data;
         input >> data;
+        std::cout << "loaded font: " << data.dump() << std::endl;
 
         loaded_font = data.get<font>();
+        ;
     }
 }

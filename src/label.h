@@ -8,7 +8,7 @@ struct label
 {
     std::string text;
     int font_size;
-    SDL_Color color;
+    SDL_FColor color;
 };
 
 #endif

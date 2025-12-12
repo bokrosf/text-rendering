@@ -2,25 +2,27 @@
 #define TEXT_H
 
 #include <string>
-#include <unordered_map>
 #include <vector>
 #include <nlohmann/json.hpp>
 
 namespace text
 {
-    struct position
+    struct vertex
     {
         float x;
         float y;
     };
 
-    using polyline = std::vector<position>;
+    struct symbol
+    {
+        char code;
+        std::vector<vertex> vertices;
+    };
 
     struct font
     {
-        int width;
-        int height;
-        std::unordered_map<char, std::vector<polyline>> table;
+        float width;
+        std::vector<symbol> symbols;
     };
 
     extern font loaded_font;
@@ -28,8 +30,9 @@ namespace text
     void load_font(const std::string &path);
 
     // Defines serialization/deserialization functions.
-    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(position, x, y)
-    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(font, width, height, table)
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(vertex, x, y)
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(symbol, code, vertices)
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(font, width, symbols)
 }
 
 #endif

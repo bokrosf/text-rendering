@@ -1,8 +1,23 @@
 #include <iostream>
+#include <unordered_map>
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_init.h>
 #include <text.h>
 #include <label.h>
+
+struct triangle
+{
+    SDL_FPoint a, b, c;
+};
+
+namespace renderer
+{
+    struct font
+    {
+        float width;
+        std::unordered_map<char, std::vector<SDL_Vertex>> table;
+    };
+}
 
 struct app_context
 {
@@ -12,6 +27,8 @@ struct app_context
     SDL_Window *window;
     SDL_Renderer *renderer;
     label main_label;
+    triangle t;
+    renderer::font font;
 };
 
 app_context app = app_context
@@ -23,20 +40,21 @@ app_context app = app_context
     .renderer = nullptr,
     .main_label = label
     {
-        .text = "ababbba",
+        .text = "7",
         .font_size = 12,
-        .color = SDL_Color{255, 0, 0, 0},
+        .color = SDL_FColor{.r = 1.0, .g = 0.0, .b = 0.0, .a = 0.0},
     },
 };
 
+void load_font();
 void handle_events();
 void render();
 void render_label();
+void render_experimenting();
 
 int main(int argc, char *argv[])
 {
-    text::load_font("asset/font.json");
-
+    load_font();
     const SDL_InitFlags init_flags = SDL_INIT_EVENTS | SDL_INIT_VIDEO;
     const SDL_WindowFlags window_flags = 0;
     SDL_Init(init_flags);
@@ -63,6 +81,24 @@ int main(int argc, char *argv[])
     return 0;
 }
 
+void load_font()
+{
+    text::load_font("asset/font.json");
+    app.font.width = text::loaded_font.width;
+
+    for (auto &s : text::loaded_font.symbols)
+    {
+        for (auto &v : s.vertices)
+        {
+            app.font.table[s.code].push_back(SDL_Vertex
+            {
+                .position = SDL_FPoint{.x = v.x, .y = v.y},
+                .color = SDL_FColor{.r = 0.0, .g = 0.0, .b = 0.0, .a = 0.0}
+            });
+        }
+    }
+}
+
 void handle_events()
 {
     SDL_Event event;
@@ -87,46 +123,109 @@ void render()
 {
     SDL_SetRenderDrawColor(app.renderer, 0, 0, 0, 0);
     SDL_RenderClear(app.renderer);
+    SDL_SetRenderDrawColor(app.renderer, 0, 255, 0, 0);
     render_label();
     SDL_RenderPresent(app.renderer);
 }
 
 void render_label()
 {
+    // Draw the app label symobl by symbol.
+    // [x] Set the colors of each vertex to the label color.
+    // [x] Draw the vertices corresponding to the character.
+
+    for (auto c : app.main_label.text)
+    {
+        std::vector<SDL_Vertex> &vertices = app.font.table[c];
+
+        for (auto &v : vertices)
+        {
+            v.color = app.main_label.color;
+        }
+
+        const float scale = 1.0;
+
+        SDL_SetRenderScale(app.renderer, scale, scale);
+        SDL_RenderGeometry(
+            app.renderer,
+            nullptr,
+            vertices.data(),
+            vertices.size(),
+            nullptr,
+            0
+        );
+    }
+}
+
+void render_experimenting()
+{
     SDL_Rect original_viewport;
     SDL_GetRenderViewport(app.renderer, &original_viewport);
 
-    SDL_SetRenderDrawColor(
-        app.renderer,
-        app.main_label.color.r,
-        app.main_label.color.g,
-        app.main_label.color.b,
-        app.main_label.color.a
-    );
-
-    SDL_Rect font_area
+    // Vertices
     {
-        .x = 0,
-        .y = 0,
-        .w = text::loaded_font.width,
-        .h = text::loaded_font.height,
-    };
-
-    for (char c : app.main_label.text)
-    {
-        SDL_SetRenderViewport(app.renderer, &font_area);
-
-        for (const auto &sequence : text::loaded_font.table[c])
+        const int length = 3;
+        SDL_Vertex vertices[] =
         {
-            SDL_RenderLines(
-                app.renderer,
-                reinterpret_cast<const SDL_FPoint *>(sequence.data()),
-                sequence.size()
-            );
-        }
+            SDL_Vertex
+            {
+                .position = {0.0, 1.0},
+                .color = {255, 0, 0, 0},
+            },
+            SDL_Vertex
+            {
+                .position = {0.5, 0.0},
+                .color = {255, 0, 0, 0},
+            },
+            SDL_Vertex
+            {
+                .position = {1.0, 1.0},
+                .color = {255, 0, 0, 0},
+            },
+        };
 
-        font_area.x += text::loaded_font.width;
+        SDL_SetRenderScale(app.renderer, 16.0, 16.0);
+        SDL_RenderGeometry(app.renderer, nullptr, vertices, length, nullptr, 0);
+        SDL_SetRenderScale(app.renderer, 1.0, 1.0);
+    }
+
+    {
+        SDL_Rect viewport = {50, 0, 800, 600};
+        SDL_SetRenderViewport(app.renderer, &viewport);
+
+        const int length = 3;
+        SDL_Vertex vertices[] =
+        {
+            SDL_Vertex
+            {
+                .position = {0.0, 16.0},
+                .color = {0, 255, 0, 0},
+            },
+            SDL_Vertex
+            {
+                .position = {8.0, 0.0},
+                .color = {0, 255, 0, 0},
+            },
+            SDL_Vertex
+            {
+                .position = {16.0, 16.0},
+                .color = {0, 255, 0, 0},
+            },
+        };
+
+        SDL_RenderGeometry(app.renderer, nullptr, vertices, length, nullptr, 0);
     }
 
     SDL_SetRenderViewport(app.renderer, &original_viewport);
+
+    // Lines
+    // {
+    //     SDL_FPoint lines[] = {
+    //         {0.0, 16.0},
+    //         {8.0, 0.0},
+    //         {16.0, 16.0},
+    //         {0.0, 16.0},
+    //     };
+    //     SDL_RenderLines(app.renderer, lines, 4);
+    // }
 }
