@@ -16,6 +16,5 @@ namespace text
         std::cout << "loaded font: " << data.dump() << std::endl;
 
         loaded_font = data.get<font>();
-        ;
     }
 }
