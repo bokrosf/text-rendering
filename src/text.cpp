@@ -2,7 +2,7 @@
 #include <iostream>
 #include <text.h>
 
-using json = nlohmann::json;
+using json = nlohmann::ordered_json;
 
 namespace text
 {
@@ -11,8 +11,7 @@ namespace text
     void load_font(const std::string &path)
     {
         std::ifstream input(path);
-        json data;
-        input >> data;
+        json data = json::parse(input);
         std::cout << "loaded font: " << data.dump() << std::endl;
 
         loaded_font = data.get<font>();
