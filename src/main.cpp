@@ -40,7 +40,7 @@ app_context app = app_context
     .renderer = nullptr,
     .main_label = label
     {
-        .text = "7",
+        .text = "0",
         .font_size = 12,
         .color = SDL_FColor{.r = 1.0, .g = 0.0, .b = 0.0, .a = 0.0},
     },
@@ -130,20 +130,16 @@ void render()
 
 void render_label()
 {
-    // Draw the app label symobl by symbol.
-    // [x] Set the colors of each vertex to the label color.
-    // [x] Draw the vertices corresponding to the character.
-
-    for (auto c : app.main_label.text)
+    for (auto symbol : app.main_label.text)
     {
-        std::vector<SDL_Vertex> &vertices = app.font.table[c];
+        std::vector<SDL_Vertex> &vertices = app.font.table[symbol];
 
         for (auto &v : vertices)
         {
             v.color = app.main_label.color;
         }
 
-        const float scale = 1.0;
+        const float scale = 4.0;
 
         SDL_SetRenderScale(app.renderer, scale, scale);
         SDL_RenderGeometry(
