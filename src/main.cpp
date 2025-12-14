@@ -50,7 +50,6 @@ void load_font();
 void handle_events();
 void render();
 void render_label();
-void render_experimenting();
 
 int main(int argc, char *argv[])
 {
@@ -151,77 +150,4 @@ void render_label()
             0
         );
     }
-}
-
-void render_experimenting()
-{
-    SDL_Rect original_viewport;
-    SDL_GetRenderViewport(app.renderer, &original_viewport);
-
-    // Vertices
-    {
-        const int length = 3;
-        SDL_Vertex vertices[] =
-        {
-            SDL_Vertex
-            {
-                .position = {0.0, 1.0},
-                .color = {255, 0, 0, 0},
-            },
-            SDL_Vertex
-            {
-                .position = {0.5, 0.0},
-                .color = {255, 0, 0, 0},
-            },
-            SDL_Vertex
-            {
-                .position = {1.0, 1.0},
-                .color = {255, 0, 0, 0},
-            },
-        };
-
-        SDL_SetRenderScale(app.renderer, 16.0, 16.0);
-        SDL_RenderGeometry(app.renderer, nullptr, vertices, length, nullptr, 0);
-        SDL_SetRenderScale(app.renderer, 1.0, 1.0);
-    }
-
-    {
-        SDL_Rect viewport = {50, 0, 800, 600};
-        SDL_SetRenderViewport(app.renderer, &viewport);
-
-        const int length = 3;
-        SDL_Vertex vertices[] =
-        {
-            SDL_Vertex
-            {
-                .position = {0.0, 16.0},
-                .color = {0, 255, 0, 0},
-            },
-            SDL_Vertex
-            {
-                .position = {8.0, 0.0},
-                .color = {0, 255, 0, 0},
-            },
-            SDL_Vertex
-            {
-                .position = {16.0, 16.0},
-                .color = {0, 255, 0, 0},
-            },
-        };
-
-        SDL_RenderGeometry(app.renderer, nullptr, vertices, length, nullptr, 0);
-    }
-
-    SDL_SetRenderViewport(app.renderer, &original_viewport);
-
-    // Lines
-    // {
-    //     SDL_FPoint lines[] = {
-    //         {0.0, 16.0},
-    //         {8.0, 0.0},
-    //         {16.0, 16.0},
-    //         {0.0, 16.0},
-    //     };
-    //     SDL_RenderLines(app.renderer, lines, 4);
-    // }
 }
