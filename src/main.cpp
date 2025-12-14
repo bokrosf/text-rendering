@@ -139,7 +139,7 @@ void render_label()
             v.color = app.main_label.color;
         }
 
-        const float scale = 4.0;
+        const float scale = 16.0;
 
         SDL_SetRenderScale(app.renderer, scale, scale);
         SDL_RenderGeometry(
