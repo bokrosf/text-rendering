@@ -43,6 +43,7 @@ app_context app = app_context
         .text = "0123456789",
         .font_size = 12,
         .color = SDL_FColor{.r = 1.0, .g = 0.0, .b = 0.0, .a = 1.0},
+        .position{.x = 100, .y = 50},
     },
 };
 
@@ -139,7 +140,13 @@ void render_label()
         symbol_height
     );
 
-    SDL_FRect render_area{.x = 0, .y = 0, .w = symbol_width, .h = symbol_height};
+    SDL_FRect render_area
+    {
+        .x = app.main_label.position.x,
+        .y = app.main_label.position.y,
+        .w = symbol_width,
+        .h = symbol_height
+    };
     
     for (auto symbol : app.main_label.text)
     {
