@@ -40,9 +40,9 @@ app_context app = app_context
     .renderer = nullptr,
     .main_label = label
     {
-        .text = "0",
+        .text = "0123456789",
         .font_size = 12,
-        .color = SDL_FColor{.r = 1.0, .g = 0.0, .b = 0.0, .a = 0.0},
+        .color = SDL_FColor{.r = 1.0, .g = 0.0, .b = 0.0, .a = 1.0},
     },
 };
 
@@ -120,34 +120,48 @@ void handle_events()
 
 void render()
 {
-    SDL_SetRenderDrawColor(app.renderer, 0, 0, 0, 0);
+    SDL_SetRenderDrawColor(app.renderer, 0, 0, 0, 255);
     SDL_RenderClear(app.renderer);
-    SDL_SetRenderDrawColor(app.renderer, 0, 255, 0, 0);
     render_label();
     SDL_RenderPresent(app.renderer);
 }
 
 void render_label()
 {
+    const int symbol_height = 16;
+    const int symbol_width = symbol_height * app.font.width;
+
+    SDL_Texture *texture = SDL_CreateTexture(
+        app.renderer,
+        SDL_PIXELFORMAT_RGBA8888,
+        SDL_TextureAccess::SDL_TEXTUREACCESS_TARGET,
+        symbol_height,
+        symbol_height
+    );
+
+    SDL_FRect render_area{.x = 0, .y = 0, .w = symbol_width, .h = symbol_height};
+    
     for (auto symbol : app.main_label.text)
     {
-        std::vector<SDL_Vertex> &vertices = app.font.table[symbol];
-
+        auto &vertices = app.font.table[symbol];
+        
         for (auto &v : vertices)
         {
             v.color = app.main_label.color;
         }
 
-        const float scale = 16.0;
+        SDL_SetRenderTarget(app.renderer, texture);
+        SDL_RenderClear(app.renderer);
+        SDL_SetRenderScale(app.renderer, symbol_height, symbol_height);
+        SDL_RenderGeometry(app.renderer, nullptr, vertices.data(), vertices.size(), nullptr, 0);
+        SDL_SetRenderTarget(app.renderer, nullptr);
 
-        SDL_SetRenderScale(app.renderer, scale, scale);
-        SDL_RenderGeometry(
-            app.renderer,
-            nullptr,
-            vertices.data(),
-            vertices.size(),
-            nullptr,
-            0
-        );
+        float empty_offset = 0.5 * (symbol_height - symbol_width);
+        SDL_FRect texture_area{.x = empty_offset, .y = 0, .w = symbol_width, .h = symbol_height};
+        SDL_RenderTexture(app.renderer, texture, &texture_area, &render_area);
+        render_area.x += symbol_width;
     }
+
+    SDL_SetRenderTarget(app.renderer, nullptr);
+    SDL_DestroyTexture(texture);
 }
