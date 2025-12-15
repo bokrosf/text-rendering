@@ -41,7 +41,7 @@ app_context app = app_context
     .main_label = label
     {
         .text = "0123456789",
-        .font_size = 12,
+        .font_size = 1.0,
         .color = SDL_FColor{.r = 1.0, .g = 0.0, .b = 0.0, .a = 1.0},
         .position{.x = 100, .y = 50},
     },
@@ -129,7 +129,7 @@ void render()
 
 void render_label()
 {
-    const int symbol_height = 16;
+    const int symbol_height = 16 * app.main_label.font_size;
     const int symbol_width = symbol_height * app.font.width;
 
     SDL_Texture *texture = SDL_CreateTexture(
