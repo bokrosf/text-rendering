@@ -12,7 +12,7 @@ namespace text
     {
         std::ifstream input(path);
         json data = json::parse(input);
-        std::cout << "loaded font: " << data.dump() << std::endl;
+        // std::cout << "loaded font: " << data.dump() << std::endl;
 
         loaded_font = data.get<font>();
     }
