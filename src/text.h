@@ -25,9 +25,8 @@ namespace text
         std::vector<symbol> symbols;
     };
 
-    extern font loaded_font;
-
-    void load_font(const std::string &path);
+    font load_font(const std::string &path);
+    void scale_down(font &font, const std::string &path);
 
     // Defines serialization/deserialization functions.
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(vertex, x, y)

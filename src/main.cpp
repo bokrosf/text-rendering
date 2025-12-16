@@ -83,10 +83,11 @@ int main(int argc, char *argv[])
 
 void load_font()
 {
-    text::load_font("asset/font.json");
-    app.font.width = text::loaded_font.width;
+    text::font loaded = text::load_font("asset/font_unscaled.json");
+    text::scale_down(loaded, "asset/font.json");
+    app.font.width = loaded.width;
 
-    for (auto &s : text::loaded_font.symbols)
+    for (auto &s : loaded.symbols)
     {
         for (auto &v : s.vertices)
         {
