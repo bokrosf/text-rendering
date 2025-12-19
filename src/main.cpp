@@ -84,7 +84,8 @@ int main(int argc, char *argv[])
 void load_font()
 {
     text::font loaded = text::load_font("asset/font_unscaled.json");
-    text::scale_down(loaded, "asset/font.json");
+    text::scale_down(loaded);
+    text::save_font(loaded, "asset/font.json");
     app.font.width = loaded.width;
 
     for (auto &s : loaded.symbols)

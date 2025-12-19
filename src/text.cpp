@@ -15,7 +15,15 @@ namespace text
         return data.get<font>();
     }
 
-    void scale_down(font &font, const std::string &path)
+    void save_font(const font &font, const std::string &path)
+    {
+        json data = font;
+        std::ofstream output(path);
+        output << data;
+        output.close();
+    }
+
+    void scale_down(font &font)
     {
         for (auto &s : font.symbols)
         {
@@ -25,10 +33,5 @@ namespace text
                 v.y *= (1.0 / 16.0);
             }
         }
-
-        json data = font;
-        std::ofstream output(path);
-        output << data;
-        output.close();
     }
 }

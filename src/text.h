@@ -26,7 +26,8 @@ namespace text
     };
 
     font load_font(const std::string &path);
-    void scale_down(font &font, const std::string &path);
+    void save_font(const font &font, const std::string &path);
+    void scale_down(font &font);
 
     // Defines serialization/deserialization functions.
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(vertex, x, y)
