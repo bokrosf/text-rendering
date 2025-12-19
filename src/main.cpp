@@ -40,10 +40,10 @@ app_context app = app_context
     .renderer = nullptr,
     .main_label = label
     {
-        .text = "0123456789",
-        .font_size = 1.0,
+        .text = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        .font_size = 2.0,
         .color = SDL_FColor{.r = 1.0, .g = 0.0, .b = 0.0, .a = 1.0},
-        .position{.x = 100, .y = 50},
+        .position{.x = 0, .y = 0},
     },
 };
 
