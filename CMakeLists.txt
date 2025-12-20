@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 3.29.0)
 project(text_rendering)
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
-
 include(FetchContent)
 
 FetchContent_Declare(
